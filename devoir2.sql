@@ -9,20 +9,20 @@ use library;
 
 -- Exercice 3 : À partir de la table « titles », obtenir la liste des titres dont l’identifiant débute par SU ou BU. Affiche le titre et le prix de chaque livre. (15 pts)
 
- select title, price from titles where titles.type rlike  '[bs]u'  group by title_id;
+ select title, price from titles where titles.type rlike  '[bs]u%'  group by title_id;
 
 -- Exercice 4 : À partir de la table « titles », obtenir la liste des titres dont l’identifiant ne débute pas par SU ou BU. Affiche le titre et le prix de chaque livre. (15 pts)
 
- select title, price from titles where titles.type not rlike  '[bs]u'  group by title_id;
+ select title, price from titles where titles.type not rlike  '[bs]u%'  group by title_id;
 
 -- Exercice 5 : À partir de la table « titles », obtenir la liste des titres ne débutant ni par S, ni par B, mais dont la seconde lettre est « o ». Affiche le titre et le prix. (15 pts)
 
- select title, price from titles where titles.type not rlike  '[bs]' and titles.type like '_o%'  group by title_id;
+ select title, price from titles where title not rlike  '[bs]%' and title like '_o%'  group by title_id;
 
 -- Exercice 6 : À partir de la table « titles », obtenir la liste des titres ne débutant ni par S, ni par B, mais dont la 3ième lettre est « f ». Affiche le titre et le prix. (15 pts)
 
- select title, price from titles where titles.type not rlike  '[bs]' and titles.type like '__f%'  group by title_id;
+ select title, price from titles where title not rlike  '[bs]%' and title like '__f%'  group by title_id;
 
 -- Exercice 7 : À partir de la table « titles », obtenir la liste des titres débutant par l’une des 10 premières lettres de l’alphabet. Affiche le titre et le prix. (15 pts)
 
- select title, price from titles where (title rlike '^[a-j]')  group by title_id;
+ select title, price from titles where title rlike '^[a-j]'  group by title_id;
