@@ -28,6 +28,7 @@ select pub_name, au_fname from library.publishers as p
 left join 
 library.authors as a on (a.city = p.city);
 -- 5. Effectif(nombre) d'employes par niveau d'experience (15pts)
+SELECT count(*) as Effectif, job_lvl FROM employees group by job_lvl;
 
 
 -- 6. Liste des employes par maison d'edition (15pts)
@@ -36,4 +37,4 @@ library.authors as a on (a.city = p.city);
 -- 7. Salaires horaires moyens des employes par maison d'edition (15pts)
 
 
--- 8- Effectif(nombre) d'employées de niveau SEINIOR par maison d'edition
+-- 8- Effectif(nombre) d'employées de niveau SEINIOR (**?voir dictionnaire Senior?**) par maison d'edition
