@@ -14,6 +14,7 @@ left join
 library.publishers as p on (a.city = p.city);
 
 -- 3. La liste des paires (auteur, éditeur) demeurant dans la même ville, incluant aussi les éditeurs qui ne répondent pas à ce critère. (10pts)
+
 select pub_name, au_fname from library.publishers as p
 left join 
 library.authors as a on (a.city = p.city);
@@ -32,11 +33,15 @@ SELECT count(*) as Effectif, job_lvl FROM employees group by job_lvl;
 
 
 -- 6. Liste des employes par maison d'edition (15pts)
+
 SELECT fname, p.pub_name FROM library.publishers as p
 inner join 
 library.employees as e where e.pub_id = p.pub_id;
 
 -- 7. Salaires horaires moyens des employes par maison d'edition (15pts)
 
+SELECT avg(salary) AS moyenne, p.pub_name FROM library.publishers AS p
+JOIN
+library.employees as e where e.pub_id =p.pub_id group by p.pub_id;
 
 -- 8- Effectif(nombre) d'employées de niveau SEINIOR (**?voir dictionnaire Senior?**) par maison d'edition
