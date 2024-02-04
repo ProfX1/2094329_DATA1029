@@ -32,7 +32,9 @@ SELECT count(*) as Effectif, job_lvl FROM employees group by job_lvl;
 
 
 -- 6. Liste des employes par maison d'edition (15pts)
-
+SELECT fname, p.pub_name FROM library.publishers as p
+inner join 
+library.employees as e where e.pub_id = p.pub_id;
 
 -- 7. Salaires horaires moyens des employes par maison d'edition (15pts)
 
