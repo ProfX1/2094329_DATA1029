@@ -45,3 +45,7 @@ JOIN
 library.employees as e where e.pub_id =p.pub_id group by p.pub_id;
 
 -- 8- Effectif(nombre) d'employées de niveau SEINIOR (**?voir dictionnaire Senior?**) par maison d'edition
+
+SELECT count(*) as "Effectif Senior", p.pub_name FROM library.publishers AS p
+JOIN 
+library.employees as e where e.pub_id = p.pub_id and e.job_lvl = "SEINIOR" group by p.pub_id;
