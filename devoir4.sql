@@ -12,7 +12,19 @@ where a.au_id  not in (
 
 -- Exercice 2 Obtenir la liste des auteurs dont l’éditeur «Eyrolles » a publié tous les livres
 
-
+SELECT a.au_fname, a.au_lname
+FROM authors AS a
+WHERE NOT EXISTS (
+    SELECT t.title_id
+    FROM titles AS t
+    LEFT JOIN publishers AS p ON t.pub_id = p.pub_id
+    WHERE p.pub_name = 'Eyrolles'
+    AND t.title_id NOT IN (
+        SELECT ta.title_id
+        FROM titleauthor AS ta
+        WHERE ta.au_id = a.au_id
+    )
+);
 
 -- Exercice 3  Obtenir la liste des noms d’auteurs ayant touché une avance supérieure à toutes les avances versées par l'éditeur "Harmattan"
 
