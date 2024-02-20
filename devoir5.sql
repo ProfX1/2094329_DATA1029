@@ -37,27 +37,26 @@ CREATE TABLE authors(
   -- UNIQUE INDEX `au_id_UNIQUE` (`au_id` ASC) VISIBLE);
 );
 
-drop table IF exists redactions;
-CREATE TABLE redactions(
-	au_id tinyint not null,
-    title_id tinyint not null,
-    au_ord tinyint not null,
-    royalty float,
-    CONSTRAINT `fk_au_id` FOREIGN KEY (`au_id`) REFERENCES `authors` (`au_id`),
-	CONSTRAINT `fk_title_id` FOREIGN KEY (`title_id`) REFERENCES `titles` (`title_id`)
-    
+DROP TABLE IF EXISTS titles;
+create table titles(
+	tiles_id TINYINT AUTO_INCREMENT PRIMARY KEY,
+	titles VARCHAR(100),
+	`type` enum('Roman', 'Politique', 'Science', 'Histoire'),
+	pub_id SMALLINT REFERENCES publishers (pub_id),
+	price FLOAT,
+	advance FLOAT,
+	notes VARCHAR(255),
+	pub_date DATE
+	
 );
 
-DROP TABLE IF EXISTS sales; 
-create table sales (
-    store_id TINYINT ,
-    ord_num TINYINT,
-    title_id SMALLINT REFERENCES Titles(title_id),
-    ord_date datetime,
-    qty INT,
-    PRIMARY KEY (store_id, ord_num, title_id),
-    CONSTRAINT `fk_store_id` FOREIGN KEY (`store_id`) REFERENCES `stores` (`stor_id`),
-    CONSTRAINT `fk_title_id` FOREIGN KEY (`title_id`) REFERENCES `titles` (`title_id`)
+drop table IF exists redactions;
+CREATE TABLE redactions(
+	au_id tinyint not null REFERENCES `authors` (`au_id`),
+    title_id tinyint not null REFERENCES `titles` (`title_id`),
+    au_ord tinyint not null,
+    royalty float
+       
 );
 
 DROP TABLE IF EXISTS stores;
@@ -70,18 +69,17 @@ create table stores (
     country VARCHAR(50)
 );
 
-DROP TABLE IF EXISTS titles;
-create table titles(
-	tiles_id TINYINT AUTO_INCREMENT PRIMARY KEY,
-	titles VARCHAR(100),
-	`type` enum('Roman', 'Politique', 'Science', 'Histoire'),
-	pub_id SMALLINT,
-	price FLOAT,
-	advance FLOAT,
-	notes VARCHAR(255),
-	pub_date DATE,
-	CONSTRAINT `fk_pub_id` FOREIGN KEY (`pub_id`) REFERENCES `publishers` (`pub_id`)
+
+DROP TABLE IF EXISTS sales; 
+create table sales (
+    store_id TINYINT REFERENCES `stores` (`stor_id`),
+    ord_num TINYINT,
+    title_id SMALLINT REFERENCES `titles` (`title_id`),
+    ord_date datetime,
+    qty INT,
+    PRIMARY KEY (store_id, ord_num, title_id)
 );
+
 
 DROP TABLE IF EXISTS employees;
 create table employees(
@@ -90,9 +88,8 @@ create table employees(
     salary smallint not null,
     fname varchar(50) not null,
     lname varchar(50) not null,
-    job_id tinyint not null,
+    job_id smallint not null  REFERENCES `jobs` (`job_id`),
+    pub_id smallint not null REFERENCES `publishers` (`pub_id`),
     pub_date date not null,
-    email varchar(50) NOT NULL unique CHECK(email LIKE '%@%'),
-    CONSTRAINT `fk_job_id` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`job_id`),
-    CONSTRAINT `fk_pub_id` FOREIGN KEY (`pub_id`) REFERENCES `publishers` (`pub_id`)
+    email varchar(50) NOT NULL unique CHECK(email LIKE '%@%')
 );
