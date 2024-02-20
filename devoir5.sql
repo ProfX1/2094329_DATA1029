@@ -59,3 +59,13 @@ create table sales (
     CONSTRAINT `fk_store_id` FOREIGN KEY (`store_id`) REFERENCES `stores` (`stor_id`),
     CONSTRAINT `fk_title_id` FOREIGN KEY (`title_id`) REFERENCES `titles` (`title_id`)
 );
+
+DROP TABLE IF EXISTS stores;
+create table stores (
+    stor_id TINYINT AUTO_INCREMENT PRIMARY KEY,
+    stor_name VARCHAR(50),
+    stor_address VARCHAR(50),
+    city VARCHAR(50),
+    state VARCHAR(50),
+    country VARCHAR(50)
+);
