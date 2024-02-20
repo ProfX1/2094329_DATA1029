@@ -30,9 +30,9 @@ CREATE TABLE authors(
   address VARCHAR(50) NOT NULL,
   city VARCHAR(50) NOT NULL,
   state VARCHAR(50) NULL,
-   zip VARCHAR(6) CHECK (zip regexp '^[A-Za-z][0-9][A-Za-z][0-9][A-Za-z][0-9]$') not NULL,
-  contract text, 
-  email varchar(50) NOT NULL unique,
+  zip VARCHAR(6) CHECK (zip regexp '^[A-Za-z][0-9][A-Za-z][0-9][A-Za-z][0-9]$') not NULL,
+  contract text null, 
+  email varchar(50) NOT NULL unique CHECK(email LIKE '%@%')
   -- PRIMARY KEY (`au_id`),
   -- UNIQUE INDEX `au_id_UNIQUE` (`au_id` ASC) VISIBLE);
 );
@@ -68,4 +68,17 @@ create table stores (
     city VARCHAR(50),
     state VARCHAR(50),
     country VARCHAR(50)
+);
+
+DROP TABLE IF EXISTS titles;
+create table titles(
+tiles_id TINYINT AUTO_INCREMENT PRIMARY KEY,
+titles VARCHAR(100),
+`type` enum('Roman', 'Politique', 'Science', 'Histoire'),
+pub_id SMALLINT,
+price FLOAT,
+advance FLOAT,
+notes VARCHAR(255),
+pub_date DATE,
+CONSTRAINT `fk_pub_id` FOREIGN KEY (`pub_id`) REFERENCES `publishers` (`pub_id`)
 );
