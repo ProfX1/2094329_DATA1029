@@ -76,7 +76,16 @@ limit 2
 
 -- 9. Les auteurs des 5 livres les plus vendus. (10 pts)
 
-
+select a.au_fname, a.au_lname from authors as a
+join
+titleauthor as ta on a.au_id = ta.au_id
+join
+titles as t on t.title_id = ta.title_id
+join
+sales as s on t.title_id = s.title_id
+group by a.au_id
+order by sum(s.qty) DESC
+limit 5;
 
 -- 10. Prix moyens des livres par maisons d’édition. (10 pts)
 
