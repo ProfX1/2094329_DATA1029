@@ -95,4 +95,9 @@ group by p.pub_name;
 
 -- 11. Les 3 auteurs ayant les plus de livres (10 pts)
 
-
+select a.au_fname, a.au_lname , count(*) as amount_of_books from authors as a
+join
+titleauthor as ta on ta.au_id = a.au_id
+group by a.au_id
+order by amount_of_books DESC
+limit 3;
