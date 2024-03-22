@@ -89,7 +89,9 @@ limit 5;
 
 -- 10. Prix moyens des livres par maisons d’édition. (10 pts)
 
-
+select round(avg(t.price)) as average_price, p.pub_name from publishers as p
+join titles as t on t.pub_id = p.pub_id
+group by p.pub_name;
 
 -- 11. Les 3 auteurs ayant les plus de livres (10 pts)
 
