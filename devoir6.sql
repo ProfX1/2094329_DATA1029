@@ -49,7 +49,11 @@ where job_id = e.job_id);
 
 -- 7. De quels types sont les livres les plus vendus? (10 pts)
 
-
+select t.`type` from titles as t
+where title_id =(
+select title_id from sales
+group by title_id order by sum(qty)desc limit 1
+); 
 
 -- 8. Pour chaque boutique, les 2 livres les plus vendus et leurs prix. (10 pts)
 
