@@ -22,3 +22,37 @@ join
 publishers as p on e.pub_id = p.pub_id
 where country = 'Canada';
 
+-- 4. Noms complets des employés qui ont un manager. (10pts) 'SEINIOR' works
+
+SELECT e.fname AS first_name, e.lname AS last_name
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE j.max_lvl = 'MANAGER';
+
+-- 5. Noms complets des employés qui ont un salaire au-dessus de la moyenne de salaire chez leur employeur. (10 pts)
+
+
+
+-- 6. Noms complets des employés qui ont le salaire minimum de leur grade (10 pts)
+
+
+
+-- 7. De quels types sont les livres les plus vendus? (10 pts)
+
+
+
+-- 8. Pour chaque boutique, les 2 livres les plus vendus et leurs prix. (10 pts)
+
+
+
+-- 9. Les auteurs des 5 livres les plus vendus. (10 pts)
+
+
+
+-- 10. Prix moyens des livres par maisons d’édition. (10 pts)
+
+
+
+-- 11. Les 3 auteurs ayant les plus de livres (10 pts)
+
+
