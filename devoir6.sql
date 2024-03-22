@@ -41,7 +41,11 @@ where e.pub_id = p.pub_id);
 -- 6. Noms complets des employés qui ont le salaire minimum de leur grade (10 pts)
 
 select e.fname, e.lname, e.salary from employees as e
-where (
+join
+jobs as j on j.job_id = e.job_id
+where e.salary = (
+select min(salary)from employees 
+where job_id = e.job_id);
 
 -- 7. De quels types sont les livres les plus vendus? (10 pts)
 
