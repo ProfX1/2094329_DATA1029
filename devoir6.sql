@@ -31,11 +31,17 @@ WHERE j.max_lvl = 'MANAGER';
 
 -- 5. Noms complets des employés qui ont un salaire au-dessus de la moyenne de salaire chez leur employeur. (10 pts)
 
-
+select e.fname, e.lname, p.pub_name from employees as e
+join
+publishers as p on p.pub_id = e.pub_id
+where e.salary > (
+select avg(salary) from employees 
+where e.pub_id = p.pub_id);
 
 -- 6. Noms complets des employés qui ont le salaire minimum de leur grade (10 pts)
 
-
+select e.fname, e.lname, e.salary from employees as e
+where (
 
 -- 7. De quels types sont les livres les plus vendus? (10 pts)
 
