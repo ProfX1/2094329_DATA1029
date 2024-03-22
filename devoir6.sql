@@ -57,7 +57,22 @@ group by title_id order by sum(qty)desc limit 1
 
 -- 8. Pour chaque boutique, les 2 livres les plus vendus et leurs prix. (10 pts)
 
-
+select s.stor_name, t.title, t.price from stores as s
+join 
+sales as sa on s.stor_id = sa.stor_id
+join
+titles as t on sa.title_id = t.title_id
+where sa.stor_id in (
+select stor_id from sales
+group by stor_id
+order by sum(qty) desc
+limit 2
+) and t.title_id in (
+select title_id from sales
+group by title_id
+order by sum(qty) desc
+limit 2
+);
 
 -- 9. Les auteurs des 5 livres les plus vendus. (10 pts)
 
