@@ -1,11 +1,10 @@
 -- 2. A quoi servent les instructions des lignes 12 et 440 dans le fichier epharmacy.sql? 3pts
--- (In SQL, specifically in MySQL, the SET FOREIGN_KEY_CHECKS = 0; and SET FOREIGN_KEY_CHECKS = 1; commands are used to disable and enable, respectively, the foreign key constraint checks temporarily.
+-- les commandes SET FOREIGN_KEY_CHECKS = 0 ; et SET FOREIGN_KEY_CHECKS = 1 ; sont utilisées pour désactiver et activer, respectivement, les contrôles de contraintes de clés étrangères de manière temporaire.
 
--- SET FOREIGN_KEY_CHECKS = 0;: This command disables the foreign key checks. It’s useful when you need to load data into tables without worrying about the order of insertion related to parent-child relationships. It allows you to bypass the foreign key constraints, which can be helpful during bulk data imports or migrations12.
--- SET FOREIGN_KEY_CHECKS = 1;: This command re-enables the foreign key checks. After you have completed operations that required disabling the foreign key constraints, you should run this command to ensure the integrity of your data going forward12.
--- It’s important to note that while foreign key checks are disabled, you can insert data that would normally violate foreign key constraints. Therefore, you should use these commands with caution and ensure that you re-enable the checks after completing your tasks to maintain data integrity23.
+-- SET FOREIGN_KEY_CHECKS = 0; : Cette commande désactive les vérifications des clés étrangères. Elle est utile lorsque vous devez charger des données dans des tables sans vous soucier de l'ordre d'insertion lié aux relations parent-enfant. Elle vous permet de contourner les contraintes de clés étrangères, ce qui peut s'avérer utile lors d'importations ou de migrations de données en masse.
 
--- Remember, these settings are session-based. If you set them within a session, they do not affect other sessions. Once the session ends, the settings revert to their defaults1. Always make sure to set FOREIGN_KEY_CHECKS back to 1 after you’re done to avoid any issues with data consistency1.)
+-- SET FOREIGN_KEY_CHECKS = 1; : Cette commande réactive les contrôles des clés étrangères. Après avoir effectué des opérations qui ont nécessité la désactivation des contraintes de clés étrangères, vous devez exécuter cette commande pour garantir l'intégrité de vos données à l'avenir.
+-- Il est important de noter que lorsque les contrôles de clés étrangères sont désactivés, vous pouvez insérer des données qui violeraient normalement les contraintes de clés étrangères. Par conséquent, vous devez utiliser ces commandes avec prudence et vous assurer que vous réactivez les contrôles après avoir terminé vos tâches pour maintenir l'intégrité des données.
 
 
 -- 3. Créez l’utilisateur pharma avec pour mot de passe 1234. 4pts Proposer une requête SQL permettant de déterminer :

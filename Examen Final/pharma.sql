@@ -1,3 +1,4 @@
+use epharmacy
 -- Analyse (35pts)
 -- 1. Dressez le schéma relationnel de la base de données. 8pts
 
@@ -5,7 +6,7 @@
 
 
 -- 4. Les noms complets utilisateurs de la e-pharmacie et la durée moyenne de chacun une fois connecté dans l’application ? 5pts
-
+select fname, lname from epharmacy
 
 
 -- 5. Le rôle de l’utilisateur ayant passé le plus de temps étant connecté dans l’application ? 3pts
