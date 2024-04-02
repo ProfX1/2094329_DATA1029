@@ -12,7 +12,13 @@ connection_history as c on u.id = c.user_id group by user_id;
 
 
 -- 5. Le rôle de l’utilisateur ayant passé le plus de temps étant connecté dans l’application ? 3pts
-
+SELECT r.name
+FROM roles AS r
+JOIN users AS u ON u.role_id = r.id
+JOIN connection_history AS c ON c.user_id = u.id
+GROUP BY r.name
+ORDER BY SUM(c.onsite_time) DESC
+LIMIT 1;
 
 
 -- 6. Les fournisseurs des 3 produits les plus commercialisés ? 7pts
