@@ -6,9 +6,9 @@ use epharmacy
 
 
 -- 4. Les noms complets utilisateurs de la e-pharmacie et la durée moyenne de chacun une fois connecté dans l’application ? 5pts
-select fname, lname, avg(onsite_time) from users as u
+select firstname, lastname, avg(onsite_time) from users as u
 join
-connection_history as c on u.id = c.user_id;
+connection_history as c on u.id = c.user_id group by user_id;
 
 
 -- 5. Le rôle de l’utilisateur ayant passé le plus de temps étant connecté dans l’application ? 3pts
