@@ -34,9 +34,13 @@ LIMIT 3;
 
 
 -- 7. Les chiffres d'affaires par entrepôts. 5pts
-select sum (p.price) from products as p
-join warehouses as w on w.id = p.warehouse_id
-join invoice_elements as ie on ie.id = 
+SELECT w.name AS warehouse_name, COALESCE(SUM(o.total_amount), 0) AS total_sales
+FROM warehouses w
+LEFT JOIN products p ON p.warehouse_id = w.id
+LEFT JOIN cart_product cp ON cp.product_id = p.id
+LEFT JOIN carts c ON c.id = cp.cart_id
+LEFT JOIN orders o ON o.cart_id = c.id
+GROUP BY w.id, w.name;
 
 
 -- Evolution du schéma (30pts)
