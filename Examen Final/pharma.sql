@@ -34,7 +34,9 @@ LIMIT 3;
 
 
 -- 7. Les chiffres d'affaires par entrepôts. 5pts
-
+select sum (p.price) from products as p
+join warehouses as w on w.id = p.warehouse_id
+join invoice_elements as ie on ie.id = 
 
 
 -- Evolution du schéma (30pts)
@@ -57,7 +59,8 @@ enum('MALE', 'FEMALE', 'OTHER') not null;
 
 
 -- 11.Ajouter une contrainte a la table users afin de garantir l’unicité des adresses électroniques(email) des utilisateurs de l’application. 5pts
-
+alter table users
+add unique (email);
 
 
 -- Insertion de données. (25pts)
