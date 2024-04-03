@@ -22,7 +22,15 @@ LIMIT 1;
 
 
 -- 6. Les fournisseurs des 3 produits les plus commercialisés ? 7pts
-
+SELECT s.name
+FROM suppliers AS s
+JOIN products AS p ON p.supplier_id = s.id 
+JOIN cart_product AS cp ON cp.product_id = p.id
+JOIN carts AS c ON cp.cart_id = c.id
+JOIN orders AS o ON o.cart_id = c.id
+GROUP BY s.id, s.name
+ORDER BY COUNT(cp.product_id) DESC
+LIMIT 3;
 
 
 -- 7. Les chiffres d'affaires par entrepôts. 5pts
