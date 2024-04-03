@@ -8,5 +8,5 @@
 
 
 -- 3. Créez l’utilisateur pharma avec pour mot de passe 1234. 4pts Proposer une requête SQL permettant de déterminer :
-CREATE USER "pharma"@"localhost" identified by "1234";
-
+CREATE USER 'pharma'@'localhost' identified by "1234";
+grant alter, select, update, create, create routine on epharmacy.* TO 'pharma'@'localhost';
