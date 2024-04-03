@@ -81,7 +81,42 @@ enum('MALE', 'FEMALE', 'OTHER') not null;
 -- c. Les autres auront utilisateur auront pour image other.jpg
 -- NB : les utilisateurs ayant déjà spécifié leur image de profil ne sont donc pas affectés par l'exécution de cette procédure.
 
+ALTER TABLE users
+ADD COLUMN profile_image VARCHAR(255);
 
+DELIMITER $$
+
+-- Supprimer la procédure stockée existante si elle existe
+DROP PROCEDURE IF EXISTS spprofileimage;
+
+-- Créer la nouvelle procédure stockée
+CREATE PROCEDURE spprofileimage(IN p_user_id INT)
+BEGIN
+    DECLARE user_gender VARCHAR(10);
+    DECLARE default_image VARCHAR(50);
+
+    -- Obtenir le genre de l'utilisateur
+    SELECT gender INTO user_gender
+    FROM users
+    WHERE id = p_user_id;
+
+    -- Définir l'image par défaut en fonction du genre
+    IF user_gender = 'male' THEN
+        SET default_image = 'male.png';
+    ELSEIF user_gender = 'female' THEN
+        SET default_image = 'female.png';
+    ELSE
+        SET default_image = 'default.png'; -- Image par défaut pour les autres genres
+    END IF;
+
+    -- Mettre à jour l'image de profil de l'utilisateur
+    UPDATE users
+    SET profile_image = default_image
+    WHERE id = p_user_id AND profile_image IS NULL;
+END$$
+
+DELIMITER ;
+CALL spprofileimage();-- placer entre les parentese le numero du id de la personne
 
 -- 11.Ajouter une contrainte a la table users afin de garantir l’unicité des adresses électroniques(email) des utilisateurs de l’application. 5pts
 alter table users
