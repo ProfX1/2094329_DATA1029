@@ -45,9 +45,22 @@ GROUP BY w.id, w.name;
 
 -- Evolution du schéma (30pts)
 -- 8. Modifier la table products de sorte à affecter l’image “medoc.jpg” comme image par défaut aux produits médicaux. 5pts
+DELIMITER $$
 
+create trigger default_medical_image_before_insert
+before insert on products
+for each row
+begin
+  if new.type = 'médical' and new.image is null then
+    set new.image = 'medoc.jpg';
+  end if;
+end$$
 
+DELIMITER ;
 
+update products
+set image = 'medoc.jpg'
+where type = 'médical' and image is null;
 -- 9. Ajouter une colonne gender spécifiant le sexe des utilisateurs de l’application. Cette colonne doit être une énumération contenant pour valeur MALE, FEMALE et OTHER. 5pts
 alter table users
 add column gender 
