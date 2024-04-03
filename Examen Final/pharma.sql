@@ -47,20 +47,28 @@ GROUP BY w.id, w.name;
 -- 8. Modifier la table products de sorte à affecter l’image “medoc.jpg” comme image par défaut aux produits médicaux. 5pts
 DELIMITER $$
 
-create trigger default_medical_image_before_insert
-before insert on products
-for each row
-begin
-  if new.type = 'médical' and new.image is null then
-    set new.image = 'medoc.jpg';
-  end if;
-end$$
+CREATE TRIGGER set_default_image_for_medical
+BEFORE INSERT ON products
+FOR EACH ROW
+BEGIN
+  IF NEW.type = 'Médicaux' AND NEW.image IS NULL THEN
+    SET NEW.image = 'medoc.jpg';
+  END IF;
+END$$
 
 DELIMITER ;
 
 update products
 set image = 'medoc.jpg'
-where type = 'médical' and image is null;
+where id > 0 and image is null;
+
+alter table products
+alter column image set default 'medoc.jpg';
+
+update products
+set image = 'medoc.jpg'
+where id > 0 and type = 'Médicaux' and image is null;
+
 -- 9. Ajouter une colonne gender spécifiant le sexe des utilisateurs de l’application. Cette colonne doit être une énumération contenant pour valeur MALE, FEMALE et OTHER. 5pts
 alter table users
 add column gender 
@@ -88,6 +96,86 @@ add unique (email);
 -- d. Calculez le total de chacune des commandes et insérer convenablement 5pts
 -- e. Le taux d’impôt pour chacune des factures s’élève a 10% 5pts
 
+start TRANSACTION;
+
+insert into products(id, name, description, code_product, supplier_id, warehouse_id, image, min_quantity, price) values
+(6, 'Gravol', 'produit anti-douleur', 'T12344', 1, 1, NULL, 1, 5.50), 
+(7, 'Ibuprofen','produit anti-douleur','', 1, 1, NULL, 1, 11), 
+(8, 'Multi-Vitamine', 'produit inutile', '', 1, 1, NULL, 1, 25);
+
+insert into users (firstname, lastname, country, email, password, image, role_id) values
+('Alain', 'Foka', 'Canada', 'Alain.Foka@email.com', '', '', 3);
+
+-- Get the user ID of Fati Amadou
+SET @fati_user_id = (SELECT `id` FROM `users` WHERE `firstname` = 'Fati' AND `lastname` = 'Amadou');
+set @alain_user_id = (SELECT `id` FROM `users` WHERE `firstname` = 'Alain' AND `lastname` = 'Foka');
+
+-- Get the user ID of Abdoulaye Mohamed
+SET @admin_user_id = (SELECT `id` FROM `users` WHERE `firstname` = 'Abdoulaye' AND `lastname` = 'Mohamed');
+
+-- Get the product IDs for Advil, Paracetamol2, and Gravol
+
+SET @advil_product_id = (SELECT `id` FROM `products` WHERE `name` = 'Advile');
+SET @ducolax_product_id = (SELECT `id` FROM `products` WHERE `name` = 'Ducolax');
+SET @paracetamol_product_id = (SELECT `id` FROM `products` WHERE `name` = 'Paracetamol2');
+SET @gravol_product_id = (SELECT `id` FROM `products` WHERE `name` = 'Gravol');
+SET @ibuprofen_product_id = (SELECT `id` FROM `products` WHERE `name` = 'Ibuprofen');
+SET @multi_product_id = (SELECT `id` FROM `products` WHERE `name` = 'Multi-Vitamine');
+SET @tilenol_product_id = (SELECT `id` FROM `products` WHERE `name` = 'Tilenol');
+SET @koga_product_id = (SELECT `id` FROM `products` WHERE `name` = 'Bon Koga');
+
+-- Insert orders for Fati Amadou
+
+INSERT INTO `orders` (`customer_id`, `order_date`, `total_amount`, `status`, `user_id`, `cart_id`)
+VALUES 
+(@fati_user_id, NOW(), 4 * (SELECT `price` FROM `products` WHERE `id` = @advil_product_id), 0, @admin_user_id, 2), 
+(@fati_user_id, NOW(), 5 * (SELECT `price` FROM `products` WHERE `id` = @paracetamol_product_id), 0, @admin_user_id, 2),
+(@fati_user_id, NOW(), 7 * (SELECT `price` FROM `products` WHERE `id` = @gravol_product_id), 0, @admin_user_id, 2),
+-- Alain
+(@alain_user_id, NOW(), 5 * (SELECT `price` FROM `products` WHERE `id` = @ibuprofen_product_id), 0, @admin_user_id, 3),
+(@alain_user_id, NOW(), 3 * (SELECT `price` FROM `products` WHERE `id` = @ducolax_product_id), 0, @admin_user_id, 3),
+(@alain_user_id, NOW(), 4 * (SELECT `price` FROM `products` WHERE `id` = @tilenol_product_id), 0, @admin_user_id, 3),
+(@alain_user_id, NOW(), 7 * (SELECT `price` FROM `products` WHERE `id` = @gravol_product_id), 0, @admin_user_id, 3);
+-- Fati
+(@fati_user_id, NOW(), 1 * (SELECT `price` FROM `products` WHERE `id` = @multi_product_id), 0, @admin_user_id, 2), 
+(@fati_user_id, NOW(), 2 * (SELECT `price` FROM `products` WHERE `id` = @koga_product_id), 0, @admin_user_id, 2),
+(@fati_user_id, NOW(), 10 * (SELECT `price` FROM `products` WHERE `id` = @gravol_product_id), 0, @admin_user_id, 2);
+
+
+INSERT INTO `carts` (`user_id`, `actif`)
+VALUES (4, 1), (@alain_user_id, 1), (@fati_user_id, 1);
+
+INSERT INTO `cart_product` (`cart_id`, `product_id`, `quantity`, `total`, `tax`, `quantity_remainder`)
+VALUES 
+  (2, (SELECT `id` FROM `products` WHERE `name` = 'Advile'), 4, 4 * (SELECT `price` FROM `products` WHERE `name` = 'Advile'), 10, 0),
+  (2, (SELECT `id` FROM `products` WHERE `name` = 'Paracetamol2'), 5, 5 * (SELECT `price` FROM `products` WHERE `name` = 'Paracetamol2'), 10, 0),
+  (2, (SELECT `id` FROM `products` WHERE `name` = 'Gravol'), 7, 7 * (SELECT `price` FROM `products` WHERE `name` = 'Gravol'), 10, 0),
+  (3, (SELECT `id` FROM `products` WHERE `name` = 'Ibuprofen'), 5, 5 * (SELECT `price` FROM `products` WHERE `name` = 'Ibuprofen'), 10, 0),
+  (3, (SELECT `id` FROM `products` WHERE `name` = 'Ducolax'), 3, 3 * (SELECT `price` FROM `products` WHERE `name` = 'Ducolax'), 10, 0),
+  (3, (SELECT `id` FROM `products` WHERE `name` = 'Tilenol'), 4, 4 * (SELECT `price` FROM `products` WHERE `name` = 'Tilenol'), 10, 0),
+  (3, (SELECT `id` FROM `products` WHERE `name` = 'Gravol'), 7, 7 * (SELECT `price` FROM `products` WHERE `name` = 'Gravol'), 10, 0), 
+  (4, (SELECT `id` FROM `products` WHERE `name` = 'Multi-Vitamine'), 1, 1 * (SELECT `price` FROM `products` WHERE `name` = 'Multi-Vitamine'), 10, 0),
+  (4, (SELECT `id` FROM `products` WHERE `name` = 'Bon Koga'), 2, 2 * (SELECT `price` FROM `products` WHERE `name` = 'Bon Koga'), 10, 0),
+  (4, (SELECT `id` FROM `products` WHERE `name` = 'Gravol'), 10, 10 * (SELECT `price` FROM `products` WHERE `name` = 'Gravol'), 10, 0);
+
+
+-- Insert data into invoices table
+INSERT INTO `invoices` (`montant`, `tax`, `users_id`)
+VALUES 
+  ((SELECT SUM(`total`) FROM `cart_product` WHERE `cart_id` = 2), (SELECT SUM(`total`) * 0.1 FROM `cart_product` WHERE `cart_id` = 2), @fati_user_id),
+  ((SELECT SUM(`total`) FROM `cart_product` WHERE `cart_id` = 3), (SELECT SUM(`total`) * 0.1 FROM `cart_product` WHERE `cart_id` = 3), @alain_user_id),
+  ((SELECT SUM(`total`) FROM `cart_product` WHERE `cart_id` = 4), (SELECT SUM(`total`) * 0.1 FROM `cart_product` WHERE `cart_id` = 4), @fati_user_id);
+
+
+-- Insert data into invoice_elements table
+INSERT INTO `invoice_elements` (`invoice_id`, `stocks_id`)
+values
+(1, (`product_id` FROM `cart_product` WHERE `cart_id` = 2)),
+(2, (`product_id` FROM `cart_product` WHERE `cart_id` = 3)),
+(3, (`product_id` FROM `cart_product` WHERE `cart_id` = 4));
+
+
+COMMIT;
 
 
 -- Modification de données: (10pts)
