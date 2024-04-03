@@ -43,7 +43,9 @@ LIMIT 3;
 
 
 -- 9. Ajouter une colonne gender spécifiant le sexe des utilisateurs de l’application. Cette colonne doit être une énumération contenant pour valeur MALE, FEMALE et OTHER. 5pts
-
+alter table users
+add column gender 
+enum('MALE', 'FEMALE', 'OTHER') not null;
 
 
 -- 10.Ecrire une procédure stockée spProfileImage permettant d'affecter une image de profil par défaut aux utilisateurs : 15pts
