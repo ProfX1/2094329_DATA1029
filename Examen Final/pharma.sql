@@ -101,7 +101,8 @@ start TRANSACTION;
 insert into products(id, name, description, code_product, supplier_id, warehouse_id, image, min_quantity, price) values
 (6, 'Gravol', 'produit anti-douleur', 'T12344', 1, 1, NULL, 1, 5.50), 
 (7, 'Ibuprofen','produit anti-douleur','', 1, 1, NULL, 1, 11), 
-(8, 'Multi-Vitamine', 'produit inutile', '', 1, 1, NULL, 1, 25);
+(8, 'Multi-Vitamine', 'produit inutile', '', 1, 1, NULL, 1, 25),
+(9, 'Ducolax', 'produit de marde', '', 1, 1, NULL, 1, 10);
 
 insert into users (firstname, lastname, country, email, password, image, role_id) values
 ('Alain', 'Foka', 'Canada', 'Alain.Foka@email.com', '', '', 3);
@@ -128,35 +129,35 @@ SET @koga_product_id = (SELECT `id` FROM `products` WHERE `name` = 'Bon Koga');
 
 INSERT INTO `orders` (`customer_id`, `order_date`, `total_amount`, `status`, `user_id`, `cart_id`)
 VALUES 
-(@fati_user_id, NOW(), 4 * (SELECT `price` FROM `products` WHERE `id` = @advil_product_id), 0, @admin_user_id, 2), 
-(@fati_user_id, NOW(), 5 * (SELECT `price` FROM `products` WHERE `id` = @paracetamol_product_id), 0, @admin_user_id, 2),
-(@fati_user_id, NOW(), 7 * (SELECT `price` FROM `products` WHERE `id` = @gravol_product_id), 0, @admin_user_id, 2),
+(@fati_user_id, NOW(), 175.48, 0, @admin_user_id, 2), 
+(@fati_user_id, NOW(), 60.95, 0, @admin_user_id, 2),
+(@fati_user_id, NOW(), 38.5, 0, @admin_user_id, 2),
 -- Alain
-(@alain_user_id, NOW(), 5 * (SELECT `price` FROM `products` WHERE `id` = @ibuprofen_product_id), 0, @admin_user_id, 3),
-(@alain_user_id, NOW(), 3 * (SELECT `price` FROM `products` WHERE `id` = @ducolax_product_id), 0, @admin_user_id, 3),
-(@alain_user_id, NOW(), 4 * (SELECT `price` FROM `products` WHERE `id` = @tilenol_product_id), 0, @admin_user_id, 3),
-(@alain_user_id, NOW(), 7 * (SELECT `price` FROM `products` WHERE `id` = @gravol_product_id), 0, @admin_user_id, 3);
+(@alain_user_id, NOW(), 55, 0, @admin_user_id, 3),
+(@alain_user_id, NOW(), 30, 0, @admin_user_id, 3),
+(@alain_user_id, NOW(), 93.6, 0, @admin_user_id, 3),
+(@alain_user_id, NOW(), 38.5, 0, @admin_user_id, 3),
 -- Fati
-(@fati_user_id, NOW(), 1 * (SELECT `price` FROM `products` WHERE `id` = @multi_product_id), 0, @admin_user_id, 2), 
-(@fati_user_id, NOW(), 2 * (SELECT `price` FROM `products` WHERE `id` = @koga_product_id), 0, @admin_user_id, 2),
-(@fati_user_id, NOW(), 10 * (SELECT `price` FROM `products` WHERE `id` = @gravol_product_id), 0, @admin_user_id, 2);
+(@fati_user_id, NOW(), 25, 0, @admin_user_id, 2), 
+(@fati_user_id, NOW(), 70.2, 0, @admin_user_id, 2),
+(@fati_user_id, NOW(), 55, 0, @admin_user_id, 2);
 
 
 INSERT INTO `carts` (`user_id`, `actif`)
-VALUES (4, 1), (@alain_user_id, 1), (@fati_user_id, 1);
+VALUES (@fati_user_id, 1), (@alain_user_id, 1), (@fati_user_id, 1);
 
 INSERT INTO `cart_product` (`cart_id`, `product_id`, `quantity`, `total`, `tax`, `quantity_remainder`)
 VALUES 
-  (2, (SELECT `id` FROM `products` WHERE `name` = 'Advile'), 4, 4 * (SELECT `price` FROM `products` WHERE `name` = 'Advile'), 10, 0),
-  (2, (SELECT `id` FROM `products` WHERE `name` = 'Paracetamol2'), 5, 5 * (SELECT `price` FROM `products` WHERE `name` = 'Paracetamol2'), 10, 0),
-  (2, (SELECT `id` FROM `products` WHERE `name` = 'Gravol'), 7, 7 * (SELECT `price` FROM `products` WHERE `name` = 'Gravol'), 10, 0),
-  (3, (SELECT `id` FROM `products` WHERE `name` = 'Ibuprofen'), 5, 5 * (SELECT `price` FROM `products` WHERE `name` = 'Ibuprofen'), 10, 0),
-  (3, (SELECT `id` FROM `products` WHERE `name` = 'Ducolax'), 3, 3 * (SELECT `price` FROM `products` WHERE `name` = 'Ducolax'), 10, 0),
-  (3, (SELECT `id` FROM `products` WHERE `name` = 'Tilenol'), 4, 4 * (SELECT `price` FROM `products` WHERE `name` = 'Tilenol'), 10, 0),
-  (3, (SELECT `id` FROM `products` WHERE `name` = 'Gravol'), 7, 7 * (SELECT `price` FROM `products` WHERE `name` = 'Gravol'), 10, 0), 
-  (4, (SELECT `id` FROM `products` WHERE `name` = 'Multi-Vitamine'), 1, 1 * (SELECT `price` FROM `products` WHERE `name` = 'Multi-Vitamine'), 10, 0),
-  (4, (SELECT `id` FROM `products` WHERE `name` = 'Bon Koga'), 2, 2 * (SELECT `price` FROM `products` WHERE `name` = 'Bon Koga'), 10, 0),
-  (4, (SELECT `id` FROM `products` WHERE `name` = 'Gravol'), 10, 10 * (SELECT `price` FROM `products` WHERE `name` = 'Gravol'), 10, 0);
+  (2, (SELECT `id` FROM `products` WHERE `name` = 'Advile'), 4, 175.48, 10, 0),
+  (2, (SELECT `id` FROM `products` WHERE `name` = 'Paracetamol2'), 5, 60.95, 10, 0),
+  (2, (SELECT `id` FROM `products` WHERE `name` = 'Gravol'), 7, 38.5, 10, 0),
+  (3, (SELECT `id` FROM `products` WHERE `name` = 'Ibuprofen'), 5, 55, 10, 0),
+  (3, (SELECT `id` FROM `products` WHERE `name` = 'Ducolax'), 3, 30, 10, 0),
+  (3, (SELECT `id` FROM `products` WHERE `name` = 'Tilenol'), 4, 93.6, 10, 0),
+  (3, (SELECT `id` FROM `products` WHERE `name` = 'Gravol'), 7, 38.5, 10, 0), 
+  (4, (SELECT `id` FROM `products` WHERE `name` = 'Multi-Vitamine'), 1, 25, 10, 0),
+  (4, (SELECT `id` FROM `products` WHERE `name` = 'Bon Koga'), 2, 70.2, 10, 0),
+  (4, (SELECT `id` FROM `products` WHERE `name` = 'Gravol'), 10, 55, 10, 0);
 
 
 -- Insert data into invoices table
@@ -168,12 +169,16 @@ VALUES
 
 
 -- Insert data into invoice_elements table
-INSERT INTO `invoice_elements` (`invoice_id`, `stocks_id`)
+INSERT INTO `invoice_elements` (`invoice_id` )
 values
-(1, (`product_id` FROM `cart_product` WHERE `cart_id` = 2)),
-(2, (`product_id` FROM `cart_product` WHERE `cart_id` = 3)),
-(3, (`product_id` FROM `cart_product` WHERE `cart_id` = 4));
+(1),
+(2),
+(3);
 
+select firstname, lastname from users as u
+join carts as c where c.user_id = u.id
+join cart_product as cp where cp.cart_id = c.id
+join products as p where p.id = cp.product_id;
 
 COMMIT;
 
@@ -182,3 +187,38 @@ COMMIT;
 -- Modifier les utilisateurs de l’application ainsi qu’il suit: 
 
 
+START TRANSACTION;  
+-- Modifier l'utilisateur Ali Sani 
+UPDATE users SET firstname = 'Ali',     
+lastname = 'Sani',     
+designation = 'Comptable',     
+adress = "415 Av. de l’Université",     
+province = 'NB',     
+postal_code = 'E1A 3E9',     
+phone = '4065954526',     
+email = 'Ali@ccnb.ca' 
+WHERE id = 1;  
+
+-- Modifier l'utilisateur Oumar Moussa 
+UPDATE users SET firstname = 'Oumar',     
+lastname = 'Moussa',     
+designation = 'RH',     
+adress = '1750 Rue Crevier',    
+province = 'QC',     
+postal_code = 'H4L2X5',     
+phone = '5665954526',     
+email = 'Oumar@gmail.com' 
+WHERE id = 2;  
+
+-- Modifier l'utilisateur Dupon Poupi 
+UPDATE users SET firstname = 'Dupon',     
+lastname = 'Poupi',     
+designation = 'Consultant',     
+adress = '674 Vanhorne',     
+province = 'NS',     
+postal_code = 'B4V4V5',     
+phone = '7854665265',     
+email = 'Foka@ccnb.ca' 
+WHERE id = 3; 
+
+COMMIT;
